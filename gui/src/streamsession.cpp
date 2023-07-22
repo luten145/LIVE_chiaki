@@ -421,7 +421,7 @@ void StreamSession::loadCustomPack()
     CallbackFunction callback = std::bind(&StreamSession::onCustomEvent, this, std::placeholders::_1);
     sendCallback(callback, this);
     printf("LoadComplete\n");  
-    packThread.join();
+    //packThread.join();
 }
 
 
