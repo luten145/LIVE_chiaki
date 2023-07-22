@@ -22,7 +22,11 @@ for:
 
     build_script:
       - call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" x64
-      - C:\msys64\usr\bin\bash -lc "cd \"%APPVEYOR_BUILD_FOLDER%\" && scripts/appveyor-win.sh"
+      - C:\msys64\usr\bin\bash -lc "cd \"%APPVEYOR_BUILD_FOLDER%\" && scripts/appveyor-win.sh 2>&1 | tee build.log"
+      - ps: |
+          if ((Get-Content build.log -Raw) -match 'Server shutting down') {
+            Write-Host "Server is shutting down. This is expected, continuing..."
+          }
 
     artifacts:
       - path: Chiaki
@@ -42,7 +46,11 @@ for:
 
     build_script:
       - export CMAKE_PREFIX_PATH="`pwd`/ffmpeg-prefix;/usr/local/opt/openssl@1.1;/usr/local/opt/qt@5"
-      - scripts/build-common.sh
+      - scripts/build-common.sh 2>&1 | tee build.log
+      - ps: |
+          if ((Get-Content build.log -Raw) -match 'Server shutting down') {
+            Write-Host "Server is shutting down. This is expected, continuing..."
+          }
       - cp -a build/gui/chiaki.app Chiaki.app
       - /usr/local/opt/qt@5/bin/macdeployqt Chiaki.app -dmg
 
