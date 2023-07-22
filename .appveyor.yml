@@ -23,3 +23,6 @@ artifacts:
     name: Chiaki
   - path: Chiaki-PDB
     name: Chiaki-PDB
+
+cache:
+  - ffmpeg
