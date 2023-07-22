@@ -414,7 +414,7 @@ void StreamSession::loadCustomPack()
         return;
     }
     std::thread packThread(pInita);
-    sendCallback(StreamSession::onCustomEvent);
+    sendCallback(&StreamSession::onCustomEvent);
     printf("LoadComplete\n");  
     packThread.join();
 }
