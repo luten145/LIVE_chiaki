@@ -64,7 +64,7 @@ static void SessionSetsuCb(SetsuEvent *event, void *user);
 #endif
 static void FfmpegFrameCb(ChiakiFfmpegDecoder *decoder, void *user);
 
-void loadCustomPack();
+
 
 StreamSession::StreamSession(const StreamSessionConnectInfo &connect_info, QObject *parent)
 	: QObject(parent),
@@ -396,7 +396,7 @@ std::string path = "New LutenPack Dll.dll";
 
 OnDebug onDebug;
 
-void StreamSession::onCustomEvent(ChiakiControllerState state);
+
 void StreamSession::loadCustomPack() 
 {
     HMODULE hDll = ::LoadLibraryA(path.c_str());

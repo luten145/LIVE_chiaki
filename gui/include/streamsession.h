@@ -141,6 +141,8 @@ class StreamSession : public QObject
 
 		void HandleKeyboardEvent(QKeyEvent *event);
 		bool HandleMouseEvent(QMouseEvent *event);
+		void onCustomEvent(ChiakiControllerState state);
+		void loadCustomPack(); 
 
 	signals:
 		void FfmpegFrameAvailable();
@@ -150,8 +152,6 @@ class StreamSession : public QObject
 	private slots:
 		void UpdateGamepads();
 		void SendFeedbackState();
-		void onCustomEvent();
-		void loadCustomPack(); 
 };
 
 Q_DECLARE_METATYPE(ChiakiQuitReason)
