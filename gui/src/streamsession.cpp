@@ -396,8 +396,8 @@ std::string path = "New LutenPack Dll.dll";
 
 OnDebug onDebug;
 
-void onCustomEvent(ChiakiControllerState state);
-void loadCustomPack() 
+void StreamSession::onCustomEvent(ChiakiControllerState state);
+void StreamSession::loadCustomPack() 
 {
     HMODULE hDll = ::LoadLibraryA(path.c_str());
     DLL_INIT pInita;
@@ -419,7 +419,7 @@ void loadCustomPack()
     //packThread.join();
 }
 
-void onCustomEvent(ChiakiControllerState state)
+void StreamSession::onCustomEvent(ChiakiControllerState state)
 {
     const char* aa = "OnEventGet";
     onDebug(aa, sizeof(aa));
