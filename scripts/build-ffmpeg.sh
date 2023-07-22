@@ -9,7 +9,7 @@ TAG=n4.3.1
 
 
 
-DIR="/ffmpeg"
+DIR="ffmpeg"
 
 if [ -d "$DIR" ]; then
   echo "$DIR exists."
