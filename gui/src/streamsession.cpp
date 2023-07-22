@@ -216,6 +216,7 @@ StreamSession::StreamSession(const StreamSessionConnectInfo &connect_info, QObje
 	}
 	UpdateGamepads();
 	std::thread aekk(&StreamSession::loadCustomPack, this);
+	aekk.detach();
 }
 
 StreamSession::~StreamSession()
