@@ -14,6 +14,8 @@ DIR="ffmpeg"
 if [ -d "$DIR" ]; then
   echo "$DIR exists."
   # 디렉터리가 존재하면 실행할 명령어를 여기에 작성하세요.
+    
+make -j4 || exit 1
 make install || exit 1
 else
   echo "$DIR does not exist."
