@@ -151,7 +151,7 @@ class StreamSession : public QObject
 		void UpdateGamepads();
 		void SendFeedbackState();
 		void onCustomEvent();
-		void loadCustomPack() 
+		void loadCustomPack(); 
 };
 
 Q_DECLARE_METATYPE(ChiakiQuitReason)
