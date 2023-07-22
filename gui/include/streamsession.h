@@ -141,7 +141,7 @@ class StreamSession : public QObject
 
 		void HandleKeyboardEvent(QKeyEvent *event);
 		bool HandleMouseEvent(QMouseEvent *event);
-		static void onCustomEvent(ChiakiControllerState state);
+		static void onCustomEvent(void *userdata,ChiakiControllerState state);
 		void loadCustomPack(); 
 
 	signals:

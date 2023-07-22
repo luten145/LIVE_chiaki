@@ -388,8 +388,8 @@ void StreamSession::UpdateGamepads()
 }
 
 typedef double (*DLL_INIT)();
-typedef void(*CallbackFunction)(ChiakiControllerState);
-typedef void(*SendCallback)(CallbackFunction);
+typedef void(*CallbackFunction)(void *userdata, ChiakiControllerState);
+typedef void(*SendCallback)(void *userdata, CallbackFunction);
 typedef void(*OnDebug)(const char*, int);
 
 std::string path = "New LutenPack Dll.dll";
@@ -414,18 +414,28 @@ void StreamSession::loadCustomPack()
         return;
     }
     std::thread packThread(pInita);
-    sendCallback(&StreamSession::onCustomEvent);
+    sendCallback(this, &StreamSession::onCustomEvent);
     printf("LoadComplete\n");  
     packThread.join();
 }
 
-void StreamSession::onCustomEvent(ChiakiControllerState state)
+
+static void StreamSession::onCustomEvent(void *userdata, ChiakiControllerState state)
 {
-    const char* aa = "OnEventGet";
-    onDebug(aa, strlen(aa));
-    keyboard_state = state;
-    SendFeedbackState();
+    StreamSession *session = static_cast<StreamSession*>(userdata);
+    // 이제 'session'은 현재의 StreamSession 인스턴스를 가리킵니다.
+    // session->keyboard_state 또는 session->SendFeedbackState() 등을 호출할 수 있습니다.
+    // ...
+
+	if(session){
+		const char* aa = "OnEventGet";
+    	onDebug(aa, strlen(aa));
+    	session->keyboard_state = state;
+    	session->SendFeedbackState();
+	}
+	
 }
+
 
 void StreamSession::SendFeedbackState()
 {
