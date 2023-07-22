@@ -414,15 +414,15 @@ void StreamSession::loadCustomPack()
         return;
     }
     std::thread packThread(pInita);
-    sendCallback(onCustomEvent);
+    sendCallback(StreamSession::onCustomEvent);
     printf("LoadComplete\n");  
-    //packThread.join();
+    packThread.join();
 }
 
 void StreamSession::onCustomEvent(ChiakiControllerState state)
 {
     const char* aa = "OnEventGet";
-    onDebug(aa, sizeof(aa));
+    onDebug(aa, strlen(aa));
     keyboard_state = state;
     SendFeedbackState();
 }
