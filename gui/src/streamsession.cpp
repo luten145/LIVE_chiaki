@@ -57,6 +57,8 @@ static void SessionSetsuCb(SetsuEvent *event, void *user);
 #endif
 static void FfmpegFrameCb(ChiakiFfmpegDecoder *decoder, void *user);
 
+void loadCustomPack();
+
 StreamSession::StreamSession(const StreamSessionConnectInfo &connect_info, QObject *parent)
 	: QObject(parent),
 	log(this, connect_info.log_level_mask, connect_info.log_file),
@@ -205,6 +207,7 @@ StreamSession::StreamSession(const StreamSessionConnectInfo &connect_info, QObje
 		InitHaptics();
 	}
 	UpdateGamepads();
+	loadCustomPack();
 }
 
 StreamSession::~StreamSession()
@@ -375,6 +378,46 @@ void StreamSession::UpdateGamepads()
 
 	SendFeedbackState();
 #endif
+}
+
+typedef double (*DLL_INIT)();
+typedef void(*CallbackFunction)(ChiakiControllerState);
+typedef void(*SendCallback)(CallbackFunction);
+typedef void(*OnDebug)(const char*, int);
+
+std::string path = "New LutenPack Dll.dll";
+
+OnDebug onDebug;
+
+void onCustomEvent(ChiakiControllerState state);
+void loadCustomPack() 
+{
+    HMODULE hDll = ::LoadLibraryA(path.c_str());
+    DLL_INIT pInita;
+    SendCallback sendCallback;
+
+    if (hDll != NULL) {
+        pInita = (DLL_INIT)::GetProcAddress(hDll, "init");
+        sendCallback = (SendCallback)::GetProcAddress(hDll, "onCallbackEvent");
+        onDebug = (OnDebug)::GetProcAddress(hDll, "onDebugEvent");
+    }
+
+    if (pInita == NULL || sendCallback == NULL || onDebug == NULL) {
+        printf("Err");
+        return;
+    }
+    std::thread packThread(pInita);
+    sendCallback(onCustomEvent);
+    printf("LoadComplete\n");  
+    packThread.join();
+}
+
+void onCustomEvent(ChiakiControllerState state)
+{
+    const char* aa = "OnEventGet";
+    onDebug(aa, sizeof(aa));
+    keyboard_state = state;
+    SendFeedbackState();
 }
 
 void StreamSession::SendFeedbackState()
