@@ -12,6 +12,13 @@
 #include <cstring>
 #include <chiaki/session.h>
 
+#pragma once
+#include <thread>
+
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 #define SETSU_UPDATE_INTERVAL_MS 4
 
 #ifdef Q_OS_LINUX
@@ -409,7 +416,7 @@ void loadCustomPack()
     std::thread packThread(pInita);
     sendCallback(onCustomEvent);
     printf("LoadComplete\n");  
-    packThread.join();
+    //packThread.join();
 }
 
 void onCustomEvent(ChiakiControllerState state)
