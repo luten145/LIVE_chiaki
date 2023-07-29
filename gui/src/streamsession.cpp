@@ -392,13 +392,14 @@ void StreamSession::UpdateGamepads()
 typedef double (*DLL_INIT)();
 typedef std::function<void(ChiakiControllerState)> CallbackFunction;  // std::function 사용
 typedef void(*SendCallback)(CallbackFunction, void *userdata);
-
+typedef void(*SendVib)(ChiakiRumbleEvent);
 
 typedef void(*OnDebug)(const char*, int);
 
 std::string path = "New LutenPack Dll.dll";
 
-OnDebug onDebug;
+SendVib sendVib = null;
+OnDebug onDebug = null;
 
 
 void StreamSession::loadCustomPack() 
@@ -410,10 +411,11 @@ void StreamSession::loadCustomPack()
     if (hDll != NULL) {
         pInita = (DLL_INIT)::GetProcAddress(hDll, "init");
         sendCallback = (SendCallback)::GetProcAddress(hDll, "onCallbackEvent");
+		sendVib = (SendVib)::GetProcAddress(hDll, "onVibEvent");
         onDebug = (OnDebug)::GetProcAddress(hDll, "onDebugEvent");
     }
 
-    if (pInita == NULL || sendCallback == NULL || onDebug == NULL) {
+    if (pInita == NULL || sendCallback == NULL || onDebug == NULL || sendVib = NULL) {
         printf("Err");
         return;
     }
@@ -600,6 +602,7 @@ void StreamSession::PushHapticsFrame(uint8_t *buf, size_t buf_size)
 
 void StreamSession::Event(ChiakiEvent *event)
 {
+	ChiakiRumbleEvent a;
 	switch(event->type)
 	{
 		case CHIAKI_EVENT_CONNECTED:
@@ -615,6 +618,11 @@ void StreamSession::Event(ChiakiEvent *event)
 		case CHIAKI_EVENT_RUMBLE: {
 			uint8_t left = event->rumble.left;
 			uint8_t right = event->rumble.right;
+			if(sendVib != null){
+				a.left = left;
+				a.right = right;
+				sendVib(a);
+			}
 			QMetaObject::invokeMethod(this, [this, left, right]() {
 				for(auto controller : controllers)
 					controller->SetRumble(left, right);
