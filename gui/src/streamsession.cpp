@@ -401,7 +401,7 @@ std::string path = "New LutenPack Dll.dll";
 SendVib sendVib = NULL;
 OnDebug onDebug = NULL;
 
-
+ChiakiRumbleEvent a;
 void StreamSession::loadCustomPack() 
 {
     HMODULE hDll = ::LoadLibraryA(path.c_str());
@@ -419,6 +419,7 @@ void StreamSession::loadCustomPack()
         printf("Error");
         return;
     }
+	sendVib(a);
     std::thread packThread(pInita);
         // onCustomEvent를 콜백 함수로 만듭니다.
     CallbackFunction callback = std::bind(&StreamSession::onCustomEvent, this, std::placeholders::_1);
@@ -602,7 +603,6 @@ void StreamSession::PushHapticsFrame(uint8_t *buf, size_t buf_size)
 
 void StreamSession::Event(ChiakiEvent *event)
 {
-	ChiakiRumbleEvent a;
 	switch(event->type)
 	{
 		case CHIAKI_EVENT_CONNECTED:
@@ -618,11 +618,9 @@ void StreamSession::Event(ChiakiEvent *event)
 		case CHIAKI_EVENT_RUMBLE: {
 			uint8_t left = event->rumble.left;
 			uint8_t right = event->rumble.right;
-			if(sendVib != NULL){
-				a.left = left;
-				a.right = right;
-				sendVib(a);
-			}
+			a.left = left;
+			a.right = right;
+			if(sendVib != NULL)	sendVib(a);
 			QMetaObject::invokeMethod(this, [this, left, right]() {
 				for(auto controller : controllers)
 					controller->SetRumble(left, right);
