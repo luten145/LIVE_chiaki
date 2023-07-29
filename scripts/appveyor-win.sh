@@ -18,6 +18,15 @@ export PATH="$PWD/ninja:$PWD/yasm:/c/Qt/5.12/msvc2017_64/bin:$PATH"
 
 scripts/build-ffmpeg.sh . --target-os=win64 --arch=x86_64 --toolchain=msvc
 
+DIR="opus"
+
+if [ -d "$DIR" ]; then
+  echo "$DIR exists."
+  # 디렉터리가 존재하면 실행할 명령어를 여기에 작성하세요.
+
+  cd build
+
+else
 git clone https://github.com/xiph/opus.git && cd opus && git checkout ad8fe90db79b7d2a135e3dfd2ed6631b0c5662ab
 mkdir build && cd build
 cmake \
@@ -27,6 +36,11 @@ cmake \
 	-DCMAKE_INSTALL_PREFIX="$BUILD_ROOT/opus-prefix" \
 	..
 ninja
+
+
+fi
+
+
 ninja install
 cd ../..
 
