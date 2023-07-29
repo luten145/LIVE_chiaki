@@ -416,7 +416,7 @@ void StreamSession::loadCustomPack()
     }
 
     if (pInita == NULL || sendCallback == NULL || onDebug == NULL || sendVib = NULL) {
-        printf("Err");
+        printf("Error");
         return;
     }
     std::thread packThread(pInita);
