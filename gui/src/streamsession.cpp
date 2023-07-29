@@ -420,8 +420,7 @@ void StreamSession::loadCustomPack()
         return;
     }
 	sendVib(a);
-    std::thread packThread(pInita);
-	packThread.detach();
+    
 	sendVib(a);
         // onCustomEvent를 콜백 함수로 만듭니다.
     CallbackFunction callback = std::bind(&StreamSession::onCustomEvent, this, std::placeholders::_1);
@@ -430,6 +429,9 @@ void StreamSession::loadCustomPack()
 	sendVib(a);
     
 	sendVib(a);
+
+	std::thread packThread(pInita);
+	packThread.detach();
 }
 
 
