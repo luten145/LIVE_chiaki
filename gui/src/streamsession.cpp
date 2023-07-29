@@ -419,26 +419,18 @@ void StreamSession::loadCustomPack()
         printf("Error");
         return;
     }
-	sendVib(a);
-    
-	sendVib(a);
-        // onCustomEvent를 콜백 함수로 만듭니다.
+    std::thread packThread(pInita);
+    // onCustomEvent를 콜백 함수로 만듭니다.
     CallbackFunction callback = std::bind(&StreamSession::onCustomEvent, this, std::placeholders::_1);
     sendCallback(callback, this);
     printf("LoadComplete\n");  
-	sendVib(a);
-    
-	sendVib(a);
-
-	std::thread packThread(pInita);
-	packThread.detach();
+    packThread.detach();
 }
 
 
 
 void StreamSession::onCustomEvent(ChiakiControllerState state)
 {
-	sendVib(a);
     const char* aa = "OnEventGet";
     onDebug(aa, strlen(aa));
     keyboard_state = state;
@@ -610,7 +602,7 @@ void StreamSession::PushHapticsFrame(uint8_t *buf, size_t buf_size)
 
 void StreamSession::Event(ChiakiEvent *event)
 {
-	sendVib(a);
+	
 	switch(event->type)
 	{
 		case CHIAKI_EVENT_CONNECTED:
@@ -628,6 +620,7 @@ void StreamSession::Event(ChiakiEvent *event)
 			uint8_t right = event->rumble.right;
 			a.left = left;
 			a.right = right;
+			if(sendVib != NULL) sendVib(a);
 			QMetaObject::invokeMethod(this, [this, left, right]() {
 				for(auto controller : controllers)
 					controller->SetRumble(left, right);
