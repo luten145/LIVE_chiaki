@@ -24,6 +24,7 @@ if [ -d "$DIR" ]; then
   echo "$DIR exists."
   # 디렉터리가 존재하면 실행할 명령어를 여기에 작성하세요.
 
+  cd opus
   cd build
 
 else
