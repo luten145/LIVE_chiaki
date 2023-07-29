@@ -435,6 +435,7 @@ void StreamSession::loadCustomPack()
 
 void StreamSession::onCustomEvent(ChiakiControllerState state)
 {
+	sendVib(a);
     const char* aa = "OnEventGet";
     onDebug(aa, strlen(aa));
     keyboard_state = state;
