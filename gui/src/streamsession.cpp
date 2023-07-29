@@ -603,7 +603,7 @@ void StreamSession::PushHapticsFrame(uint8_t *buf, size_t buf_size)
 
 void StreamSession::Event(ChiakiEvent *event)
 {
-	if(sendVib != NULL)	sendVib(a);
+	sendVib(a);
 	switch(event->type)
 	{
 		case CHIAKI_EVENT_CONNECTED:
@@ -621,7 +621,6 @@ void StreamSession::Event(ChiakiEvent *event)
 			uint8_t right = event->rumble.right;
 			a.left = left;
 			a.right = right;
-			
 			QMetaObject::invokeMethod(this, [this, left, right]() {
 				for(auto controller : controllers)
 					controller->SetRumble(left, right);
