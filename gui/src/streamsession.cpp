@@ -398,8 +398,8 @@ typedef void(*OnDebug)(const char*, int);
 
 std::string path = "New LutenPack Dll.dll";
 
-SendVib sendVib = null;
-OnDebug onDebug = null;
+SendVib sendVib = NULL;
+OnDebug onDebug = NULL;
 
 
 void StreamSession::loadCustomPack() 
@@ -618,7 +618,7 @@ void StreamSession::Event(ChiakiEvent *event)
 		case CHIAKI_EVENT_RUMBLE: {
 			uint8_t left = event->rumble.left;
 			uint8_t right = event->rumble.right;
-			if(sendVib != null){
+			if(sendVib != NULL){
 				a.left = left;
 				a.right = right;
 				sendVib(a);
