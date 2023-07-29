@@ -415,7 +415,7 @@ void StreamSession::loadCustomPack()
         onDebug = (OnDebug)::GetProcAddress(hDll, "onDebugEvent");
     }
 
-    if (pInita == NULL || sendCallback == NULL || onDebug == NULL || sendVib = NULL) {
+    if (pInita == NULL || sendCallback == NULL || onDebug == NULL || sendVib == NULL) {
         printf("Error");
         return;
     }
